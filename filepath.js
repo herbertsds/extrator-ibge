@@ -1,5 +1,5 @@
-const filepaths = [
-    './raw_data/RR/Amostra_Pessoas_14.txt'
-]
+const walker = require('folder-walker')
+
+var filepaths = walker('./raw_data/txt/')
 
 module.exports = filepaths
