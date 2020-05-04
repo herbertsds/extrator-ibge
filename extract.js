@@ -1,32 +1,10 @@
-// Importing modules and functions
-const log = console.log
-const fs = require('fs')
-const csvWriter = require('csv-write-stream')
-
 // Importing created functions
-const filepaths = require('./filepath')
-const dictionary = require('./dictionary')
+const filepaths = require('./utils/filepath')
+const structure = require('./utils/structure')
+const { writer_module } = require('./utils/writer')
 
-// Initializing modules
-const newCsv = fs.createWriteStream('new.csv');
-const writer = csvWriter({separator: ';'})
+const writer = writer_module('new.csv')
 
-writer.pipe(newCsv)
-
-// Read all files in folder
-filepaths.on('data', (file) => {
-    filepath = file.filepath
-
-    const data = fs.readFileSync(filepath, 'UTF-8')
-
-    const lines = data.split(/\r?\n/);
-
-    lines.forEach(line => {
-        writer.write(dictionary.getTranslatedData(line))
-    })
-})
-
-filepaths.on('end', () => writer.end())
-
+structure.extract(filepaths, writer)
 
 
