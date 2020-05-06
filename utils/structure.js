@@ -28,7 +28,7 @@ const extract = (file, writer) => {
     filepath = file.filepath
 
     // Filter to use only desired files
-    console.log(`Stating extraction of: ${file.basename.replace('.txt', '.csv')}`)
+    console.log(`Stating extraction of: ${file.basename}`)
 
     return new Promise((resolve, reject) => {
         const readStream = fs.createReadStream(filepath, {encoding: 'UTF-8'})
