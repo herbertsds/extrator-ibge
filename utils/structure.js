@@ -23,24 +23,36 @@ const getTranslatedData = line => {
 }
 
 // Responsible for extract data
-const extract = (filepaths, writer) => {
-    // Read all files in folder
-    filepaths.on('data', (file) => {
-        filepath = file.filepath
+const extract = (file, writer) => {
 
-        const data = fs.readFileSync(filepath, 'UTF-8')
+    filepath = file.filepath
 
-        const lines = data.split(/\r?\n/);
+    // Filter to use only desired files
+    console.log(`Stating extraction of: ${file.basename.replace('.txt', '.csv')}`)
 
-        lines.forEach(line => {
-            writer.write(getTranslatedData(line))
+    return new Promise((resolve, reject) => {
+        const readStream = fs.createReadStream(filepath, {encoding: 'UTF-8'})
+
+        readStream.on('data', (chunk) => {
+            const data = chunk.toString()
+    
+            const lines = data.split(/\r?\n/);
+    
+            lines.forEach(line => {
+                writer.write(getTranslatedData(line))
+            })
         })
+
+        readStream.on('end', () => {
+            console.log(`${file.basename.replace('.txt', '.csv')} successfully processed\n\n`)
+            resolve()
+        })
+        readStream.on('error', err => reject(err))
+
     })
 
-    //Close writer on event end
-    filepaths.on('end', () => writer.end())
-
 }
+
 
     
 module.exports = {

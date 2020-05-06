@@ -1,5 +1,5 @@
 const walker = require('folder-walker')
 
-var filepaths = walker('./raw_data/txt/')
+var filepaths_stream = walker('./raw_data/')
 
-module.exports = filepaths
+module.exports = filepaths_stream
